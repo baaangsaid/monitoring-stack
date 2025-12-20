@@ -1,0 +1,91 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+
+#THIS IS NODE-EXPORTER#
+  - job_name: 'MGD-DEV-WEB-ROOT'
+    static_configs:
+      - targets: ['172.18.74.4:9100']
+
+  - job_name: 'MGD-DEV-WEB-GRAFANA'
+    static_configs:
+       - targets: ['172.18.70.113:9100']
+
+  - job_name: 'MGD-PROD-BE-MOSTRACK'
+    static_configs:
+       - targets: ['172.18.69.155:9100']
+
+  - job_name: 'MGD-DOCKER-MOSTRANS'
+    static_configs:
+       - targets: ['54.251.88.66:9100']
+
+  - job_name: 'BACKUP-DOCKER-MOSTRACK'
+    static_configs:
+      -  targets: ['172.18.1.238:9100']
+
+  - job_name: 'MGD-PROD-BE-SERVICE'
+    static_configs:
+      - targets: ['172.18.94.180:9100']
+
+
+  - job_name: 'MGD-PROD-BE-ROOT'
+    static_configs:
+      - targets: ['172.18.73.182:9100']
+
+
+#THIS IS CADVISOR#
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['172.18.69.155:9080','54.251.88.66:9080','172.18.70.113:8181','172.18.1.238:9080']
+
+#THIS IS PROCESS_EXPORTER"
+#  - job_name: 'process_exporter'
+#    static_configs:
+#      - targets: ['172.18.70.113:9256']
+
+#THIS IS BLACKBOX
+  - job_name: 'blackbox_icmp'
+    metrics_path: /probe
+    params:
+      module: [icmp]
+    static_configs:
+      - targets:
+          - 172.18.70.113
+          - 172.18.94.180 
+          - 172.18.80.137
+          - 172.18.74.4
+          - 172.18.67.49
+          - 172.18.6.17
+          - 172.18.94.27
+         # - 54.255.166.34
+          - 172.18.73.182
+          - 172.18.90.175
+          - 172.18.85.12
+          - 172.18.69.155
+          - 172.18.79.90
+          - 172.18.66.235  
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 172.18.70.113:9115  # Nama container atau service
+
+
+  - job_name: 'web-monitoring'
+    metrics_path: /probe
+    params:
+      module: [http_flexible]
+    static_configs:
+      - targets:
+        - https://mostrans.co.id/CompanyProfile/
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 172.18.70.113:9115
+

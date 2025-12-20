@@ -1,0 +1,15 @@
+modules:
+  http_flexible:
+    prober: http
+    timeout: 10s
+    http:
+      method: GET
+      preferred_ip_protocol: "ip4"
+      follow_redirects: true
+      valid_http_versions: ["HTTP/1.1", "HTTP/2"]
+      fail_if_ssl: false
+      fail_if_status_code_not_in: []   # Ini valid untuk terima semua kode HTTP
+
+  icmp:
+    prober: icmp
+    timeout: 5s

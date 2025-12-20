@@ -1,0 +1,6 @@
+172.18.2.121 - - [12/Nov/2024:07:34:36 +0000] "GET / HTTP/1.1" 200 385 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" "-"
+172.18.2.121 - - [12/Nov/2024:07:34:36 +0000] "GET /favicon.ico HTTP/1.1" 404 555 "http://172.18.70.113/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" "-"
+172.18.2.121 - - [12/Nov/2024:08:23:55 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" "-"
+172.18.70.113 - - [28/Nov/2024:03:34:07 +0000] "GET /:9090/api/v1/label/__name__/values HTTP/1.1" 404 153 "-" "curl/7.81.0" "-"
+172.18.2.121 - - [28/May/2025:08:49:48 +0000] "GET / HTTP/1.1" 200 385 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" "-"
+172.18.2.121 - - [28/May/2025:08:49:49 +0000] "GET /favicon.ico HTTP/1.1" 404 555 "http://monitoring.aws.local/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" "-"

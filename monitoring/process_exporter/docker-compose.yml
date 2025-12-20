@@ -1,0 +1,13 @@
+services:
+  process_exporter:
+    image: ncabatoff/process-exporter:latest
+    container_name: process_exporter
+    restart: unless-stopped
+    ports:
+      - "9256:9256"
+    volumes:
+      - /proc:/host/proc:ro
+      - /home/ubuntu/monitoring/process_exporter:/config:ro
+    command:
+      - '--procfs=/host/proc'
+      - '--config.path=/config/process-exporter.yml'

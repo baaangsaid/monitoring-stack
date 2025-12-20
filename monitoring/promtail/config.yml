@@ -1,0 +1,85 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://172.18.70.113:3100/loki/api/v1/push
+
+scrape_configs:
+  # Job untuk system logs
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: varlogs
+          instance: server-grafana
+          ip: 172.18.70.113
+          __path__: /var/log/*log
+
+  # Job untuk semua Docker containers
+  - job_name: docker_containers
+    pipeline_stages:
+      - docker: {}
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: docker_containers
+          instance: server-grafana
+          ip: 172.18.70.113
+          __path__: /var/lib/docker/containers/*/*.log
+
+  # Job untuk Grafana HTTP Access Logs
+  - job_name: grafana_access
+    pipeline_stages:
+      - docker: {}
+      - match:
+          selector: '{job="grafana_access"} |~ "Request Completed"'
+          stages:
+            - regex:
+                expression: '.*method=(?P<method>\S+).*path=(?P<path>\S+).*status=(?P<status>-?\d+).*remote_addr=(?P<remote_addr>[\d\.]+).*time_ms=(?P<time_ms>\d+).*uname=(?P<username>\S+).*'
+            - labels:
+                method:
+                path:
+                status:
+                remote_addr:
+                username:
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: grafana_access
+          instance: server-grafana
+          app: grafana
+          __path__: /var/lib/docker/containers/*/*.log
+
+  # Job BARU untuk Grafana Authentication/Login Logs
+  - job_name: grafana_auth
+    pipeline_stages:
+      - docker: {}
+      - match:
+          selector: '{job="grafana_auth"} |~ "login|Login|logout|Logout|authentication|session"'
+          stages:
+            - regex:
+                expression: '.*logger=(?P<logger>\S+).*level=(?P<level>\S+).*msg="(?P<message>[^"]+)".*'
+            - regex:
+                expression: '.*uname=(?P<username>\S+).*'
+            - regex:
+                expression: '.*remote_addr=(?P<remote_addr>[\d\.]+).*'
+            - labels:
+                logger:
+                level:
+                username:
+                remote_addr:
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: grafana_auth
+          instance: server-grafana
+          app: grafana
+          __path__: /var/lib/docker/containers/*/*.log
